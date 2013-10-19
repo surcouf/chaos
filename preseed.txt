@@ -1,0 +1,117 @@
+# Locales
+d-i debian-installer/locale select fr_FR.UTF-8
+
+# Keyboard
+d-i console-keymaps-at/keymap select fr-latin9
+d-i keyboard-configuration/xkb-keymap select fr(latin9)
+
+# Network
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_domain string debianfr.net
+
+# Miroir + Proxy
+d-i mirror/country string manual
+d-i mirror/http/hostname string ftp.fr.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+# Distribution a installer.
+d-i mirror/suite string wheezy
+d-i mirror/udeb/suite string wheezy
+
+# Compte root + 1er compte utilisateur
+d-i passwd/root-password-crypted password $1$rRATBOhG$bH7wyG8y3IyWxqRpJDJUr.
+d-i passwd/user-fullname string Raphaël 'SurcouF' Bordet
+d-i passwd/username string surcouf
+d-i passwd/user-password password $1$rRATBOhG$bH7wyG8y3IyWxqRpJDJUr.
+
+# Clock
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Paris
+d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp-server string
+
+# Partitionning
+# Remove any existing LVM traces:
+d-i partman-auto/method string lvm
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+d-i partman-auto-lvm/new_vg_name string vg01
+
+# Préparation du schéma de partitionnement avec une partition /boot de 256Mo,
+# le reste de la partition en LVM, puis dans ce LVM : / de 4Go, /var de 4Go et le swap avec le reste
+d-i partman-auto/expert_recipe string   \
+boot-root ::                    \
+256 1000000 256 ext3    \
+$primary{ }             \
+$bootable{ }            \
+method{ format }        \
+format{ }               \
+use_filesystem{ }       \
+filesystem{ ext3 }      \
+mountpoint{ /boot }     \
+.                       \
+100 100000 10000000 lvm \
+$primary{ }             \
+$defaultignore{ }       \
+method{ lvm }           \
+vg_name{ vg01 }         \
+.                       \
+4352 10000 4352 ext3    \
+$lvmok{ }               \
+in_vg{ vg01 }           \
+lv_name{ racine }       \
+method{ format }        \
+format{ }               \
+use_filesystem{ }       \
+filesystem{ ext3 }      \
+mountpoint{ / }         \
+.                       \
+4352 10000 4352 ext3    \
+$lvmok{ }               \
+in_vg{ vg01 }           \
+lv_name{ var }          \
+method{ format }        \
+format{ }               \
+use_filesystem{ }       \
+filesystem{ ext3 }      \
+mountpoint{ /var }      \
+.                       \
+100% 10000 100% linux-swap \
+$lvmok{ }               \
+in_vg{ vg01 }           \
+lv_name{ swap }         \
+method{ swap }          \
+format{ }               \
+.
+
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+# Apt
+d-i apt-setup/services-select multiselect security
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+d-i apt-setup/security_host string mymirror.domain.tld/security
+
+# Ne pas participer au programme de recolte d'informations
+popularity-contest popularity-contest/participate boolean false
+
+# Grub
+# Auto install grub if this is the only one system.
+d-i grub-installer/only_debian boolean true
+
+# Standard minimal system
+tasksel tasksel/first multiselect standard
+
+# Ajout de paquets supplementaires
+d-i pkgsel/include string openssh-server build-essential
+
+# End
+# Reboot automatically
+d-i finish-install/reboot_in_progress note
