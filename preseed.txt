@@ -19,11 +19,9 @@ d-i mirror/http/proxy string
 d-i mirror/suite string wheezy
 d-i mirror/udeb/suite string wheezy
 
-# Compte root + 1er compte utilisateur
+# Only root account
 d-i passwd/root-password-crypted password $1$rRATBOhG$bH7wyG8y3IyWxqRpJDJUr.
-d-i passwd/user-fullname string Raphaël 'SurcouF' Bordet
-d-i passwd/username string surcouf
-d-i passwd/user-password password $1$rRATBOhG$bH7wyG8y3IyWxqRpJDJUr.
+d-i passwd/make-user boolean false
 
 # Clock
 d-i clock-setup/utc boolean true
