@@ -7,7 +7,11 @@ d-i keyboard-configuration/xkb-keymap select fr(latin9)
 
 # Network
 d-i netcfg/choose_interface select auto
-d-i netcfg/get_domain string debianfr.net
+# Any hostname and domain names assigned from dhcp take precedence over
+# values set here. However, setting the values still prevents the questions
+# from being shown, even if values come from dhcp.
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
 
 # Miroir + Proxy
 d-i mirror/country string manual
