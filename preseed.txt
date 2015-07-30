@@ -98,6 +98,12 @@ d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 
+### Base system installation
+# Configure APT to not install recommended packages by default. Use of this
+# option can result in an incomplete system and should only be used by very
+# experienced users.
+d-i base-installer/install-recommends boolean false
+
 ### Apt setup
 # You can choose to install non-free and contrib software.
 #d-i apt-setup/non-free boolean true
