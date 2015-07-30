@@ -13,6 +13,8 @@ d-i netcfg/dhcp_timeout string 60
 # from being shown, even if values come from dhcp.
 d-i netcfg/get_hostname string unassigned-hostname
 d-i netcfg/get_domain string unassigned-domain
+# Disable that annoying WEP key dialog.
+d-i netcfg/wireless_wep string
 
 # Miroir + Proxy
 d-i mirror/country string manual
