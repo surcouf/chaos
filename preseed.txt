@@ -127,10 +127,7 @@ popularity-contest popularity-contest/participate boolean false
 d-i grub-installer/only_debian boolean true
 
 # Standard minimal system
-tasksel tasksel/first multiselect standard
-
-# Ajout de paquets supplementaires
-d-i pkgsel/include string openssh-server build-essential
+tasksel tasksel/first multiselect standard, ssh-server
 
 # End
 # Reboot automatically
